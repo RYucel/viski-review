@@ -41,23 +41,26 @@ const Navbar: React.FC = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
   
-  // Cloudinary video URL'lerini kullan
+  // Düzeltilmiş Cloudinary video URL'leri
   useEffect(() => {
-    const videoElements = document.querySelectorAll('video') as NodeListOf<HTMLVideoElement>;
-    if (videoElements.length > 0) {
-      videoElements.forEach(videoElement => {
-        // Video elementinin source elementini bul
-        const sourceElement = videoElement.querySelector('source');
-        if (sourceElement) {
-          // Cloudinary URL'lerini kullan
-          const darkVideoUrl = "https://asset.cloudinary.com/doc39f04b/63fb307205d371fd783bf38145fe58e9";
-          const lightVideoUrl = "https://asset.cloudinary.com/doc39f04b/07207c74ae917cfc2647498d315e3d10";
-          
-          sourceElement.src = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
-          videoElement.load();
-          videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
-        }
-      });
+    const videoElement = document.getElementById('background-video') as HTMLVideoElement;
+    if (videoElement) {
+      // Düzeltilmiş Cloudinary URL'leri
+      const darkVideoUrl = "https://res.cloudinary.com/doc39f04b/video/upload/v1710852825/63fb307205d371fd783bf38145fe58e9.mp4";
+      const lightVideoUrl = "https://res.cloudinary.com/doc39f04b/video/upload/v1710852825/07207c74ae917cfc2647498d315e3d10.mp4";
+      
+      // Video elementinin source elementini bul
+      const sourceElement = videoElement.querySelector('source');
+      if (sourceElement) {
+        sourceElement.src = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
+        videoElement.load();
+        videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
+      } else {
+        // Eğer source elementi yoksa, doğrudan video src'sini ayarla
+        videoElement.src = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
+        videoElement.load();
+        videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
+      }
     }
   }, [theme]);
 

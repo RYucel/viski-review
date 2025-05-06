@@ -24,9 +24,9 @@ const HeroSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   
-  // Cloudinary video URL'leri
-  const darkVideoUrl = "https://asset.cloudinary.com/doc39f04b/63fb307205d371fd783bf38145fe58e9";
-  const lightVideoUrl = "https://asset.cloudinary.com/doc39f04b/07207c74ae917cfc2647498d315e3d10";
+  // Düzeltilmiş Cloudinary video URL'leri
+  const darkVideoUrl = "https://res.cloudinary.com/doc39f04b/video/upload/v1710852825/63fb307205d371fd783bf38145fe58e9.mp4";
+  const lightVideoUrl = "https://res.cloudinary.com/doc39f04b/video/upload/v1710852825/07207c74ae917cfc2647498d315e3d10.mp4";
   
   // Temaya göre video URL'ini belirle
   const videoUrl = isDarkMode ? darkVideoUrl : lightVideoUrl;
@@ -34,6 +34,7 @@ const HeroSection: React.FC = () => {
   return (
     <section className="relative h-[70vh] overflow-hidden">
       <video 
+        id="background-video"
         className="absolute top-0 left-0 w-full h-full object-cover z-0 video-background"
         autoPlay 
         muted 
