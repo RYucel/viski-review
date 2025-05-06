@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
+  // Remove videoLoaded and videoError states
   
   // Tema değişikliğini algıla
   useEffect(() => {
@@ -26,55 +25,21 @@ const HeroSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   
-  // Use the exact Cloudinary URLs provided by the user
-  const darkVideoUrl = "https://asset.cloudinary.com/doc39f04b/63fb307205d371fd783bf38145fe58e9";
-  const lightVideoUrl = "https://asset.cloudinary.com/doc39f04b/07207c74ae917cfc2647498d315e3d10";
+  // Local GIF URLs (assuming they are in public/gifs/)
+  const darkGifUrl = "/gifs/dark-background.gif"; // Replace with your actual dark mode GIF file name
+  const lightGifUrl = "/gifs/light-background.gif"; // Replace with your actual light mode GIF file name
   
-  // Temaya göre video URL'ini belirle
-  const videoUrl = isDarkMode ? darkVideoUrl : lightVideoUrl;
-
-  // Video yükleme ve hata işleme
-  const handleVideoLoad = () => {
-    setVideoLoaded(true);
-    setVideoError(false);
-  };
-
-  const handleVideoError = () => {
-    console.error("Video yüklenirken hata oluştu:", videoUrl);
-    setVideoError(true);
-  };
-  
-  // Statik arka plan resmi (video yüklenemezse)
-  const fallbackImage = isDarkMode 
-    ? "https://images.pexels.com/photos/5582863/pexels-photo-5582863.jpeg?auto=compress&cs=tinysrgb&w=1920"
-    : "https://images.pexels.com/photos/5582861/pexels-photo-5582861.jpeg?auto=compress&cs=tinysrgb&w=1920";
+  // Temaya göre GIF URL'ini belirle
+  const backgroundUrl = isDarkMode ? darkGifUrl : lightGifUrl;
   
   return (
     <section className="relative h-[70vh] overflow-hidden">
-      {/* Video arka plan */}
-      {!videoError && (
-        <video 
-          id="background-video"
-          className="absolute top-0 left-0 w-full h-full object-cover z-0 video-background"
-          autoPlay 
-          muted 
-          loop 
-          playsInline
-          key={videoUrl}
-          onLoadedData={handleVideoLoad}
-          onError={handleVideoError}
-        >
-          <source src={videoUrl} type="video/mp4" />
-        </video>
-      )}
-      
-      {/* Yedek statik arka plan (video yüklenemezse) */}
-      {videoError && (
-        <div 
-          className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0 animate-slow-zoom"
-          style={{ backgroundImage: `url(${fallbackImage})` }}
-        ></div>
-      )}
+      {/* GIF background */}
+      <div
+        key={backgroundUrl} // Add key to force re-render on URL change if necessary for some browsers/styling
+        className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0"
+        style={{ backgroundImage: `url(${backgroundUrl})` }}
+      ></div>
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
       <div className="absolute inset-0 z-10 pointer-events-none"

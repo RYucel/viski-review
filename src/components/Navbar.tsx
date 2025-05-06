@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
     }
-    return 'dark';
+    return 'dark'; // Default theme
   });
   const location = useLocation();
 
@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Close mobile menu when navigating
+    // Close mobile menu and search when navigating
     setIsMenuOpen(false);
     setShowSearch(false);
   }, [location]);
@@ -33,37 +33,16 @@ const Navbar: React.FC = () => {
   useEffect(() => {
     if (theme === 'light') {
       document.documentElement.classList.remove('dark');
-      document.documentElement.classList.add('mode-light');
+      document.documentElement.classList.add('mode-light'); // Optional: for specific light mode styles not covered by Tailwind's dark: prefix
     } else {
       document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('mode-light');
+      document.documentElement.classList.remove('mode-light'); // Optional
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
-  
-  // Update video source when theme changes
-  useEffect(() => {
-    const videoElement = document.getElementById('background-video') as HTMLVideoElement;
-    if (videoElement) {
-      // Use the exact Cloudinary URLs provided by the user
-      const darkVideoUrl = "https://asset.cloudinary.com/doc39f04b/63fb307205d371fd783bf38145fe58e9";
-      const lightVideoUrl = "https://asset.cloudinary.com/doc39f04b/07207c74ae917cfc2647498d315e3d10";
-      
-      const newVideoSrc = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
 
-      const sourceElement = videoElement.querySelector('source');
-      if (sourceElement && sourceElement.src !== newVideoSrc) {
-        sourceElement.src = newVideoSrc;
-        videoElement.load();
-        videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
-      } else if (!sourceElement && videoElement.src !== newVideoSrc) {
-        // Fallback if no source element, though HeroSection should have one
-        videoElement.src = newVideoSrc;
-        videoElement.load();
-        videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
-      }
-    }
-  }, [theme]);
+  // The useEffect block for manipulating 'background-video' has been removed
+  // as HeroSection now handles its own background (GIF) based on the theme.
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -72,6 +51,7 @@ const Navbar: React.FC = () => {
     // Reset search state
     setSearchTerm('');
     setShowSearch(false);
+    // Potentially navigate to a search results page or filter content
   };
 
   const toggleMobileMenu = () => {
@@ -80,6 +60,9 @@ const Navbar: React.FC = () => {
 
   const toggleSearch = () => {
     setShowSearch(!showSearch);
+    if (!showSearch) {
+      setIsMenuOpen(false); // Close mobile menu if opening search
+    }
   };
 
   const toggleTheme = () => {
@@ -90,7 +73,7 @@ const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-whiskey-dark/95 backdrop-blur-sm shadow-lg' : 'bg-transparent'
-      }`}
+      } ${isMenuOpen || showSearch ? 'bg-whiskey-dark/95 backdrop-blur-sm shadow-lg md:bg-transparent' : ''}`}
     >
       <div className="container-custom py-4">
         <div className="flex items-center justify-between">
@@ -116,7 +99,7 @@ const Navbar: React.FC = () => {
             >
               Hakkımızda
             </Link>
-            <button onClick={toggleSearch} className="nav-link">
+            <button onClick={toggleSearch} className="nav-link" aria-label="Aramayı Aç/Kapat">
               <Search size={20} />
             </button>
             <button
@@ -129,9 +112,9 @@ const Navbar: React.FC = () => {
             </button>
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button & Theme Toggle */}
           <div className="md:hidden flex items-center space-x-3">
-            <button onClick={toggleSearch} className="p-2 text-whiskey-light/80 hover:text-whiskey-amber">
+            <button onClick={toggleSearch} className="p-2 text-whiskey-light/80 hover:text-whiskey-amber" aria-label="Aramayı Aç/Kapat">
               <Search size={20} />
             </button>
             <button
@@ -145,6 +128,7 @@ const Navbar: React.FC = () => {
             <button
               onClick={toggleMobileMenu}
               className="p-2 text-whiskey-light/80 hover:text-whiskey-amber focus:outline-none"
+              aria-label="Menüyü Aç/Kapat"
             >
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -153,7 +137,7 @@ const Navbar: React.FC = () => {
 
         {/* Search Overlay */}
         {showSearch && (
-          <div className="absolute top-full left-0 right-0 bg-whiskey-dark-lighter p-4 shadow-lg slide-up">
+          <div className="absolute top-full left-0 right-0 bg-whiskey-dark-lighter p-4 shadow-lg md:slide-up-desktop slide-up-mobile"> {/* Adjusted animation classes */}
             <form onSubmit={handleSearch} className="flex space-x-2">
               <input
                 type="text"
@@ -161,6 +145,7 @@ const Navbar: React.FC = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="input-field flex-grow"
+                autoFocus
               />
               <button type="submit" className="btn-primary">
                 Ara
@@ -171,23 +156,26 @@ const Navbar: React.FC = () => {
 
         {/* Mobile Navigation Menu */}
         {isMenuOpen && (
-          <nav className="md:hidden absolute top-full left-0 right-0 bg-whiskey-dark-lighter shadow-lg slide-up">
+          <nav className="md:hidden absolute top-full left-0 right-0 bg-whiskey-dark-lighter shadow-lg slide-up-mobile"> {/* Adjusted animation class */}
             <div className="flex flex-col p-4 space-y-2">
               <Link
                 to="/"
                 className={`nav-link py-3 ${location.pathname === '/' ? 'nav-link-active' : ''}`}
+                onClick={() => setIsMenuOpen(false)} // Close menu on click
               >
                 Ana Sayfa
               </Link>
               <Link
                 to="/catalog"
                 className={`nav-link py-3 ${location.pathname === '/catalog' ? 'nav-link-active' : ''}`}
+                onClick={() => setIsMenuOpen(false)} // Close menu on click
               >
                 Katalog
               </Link>
               <Link
                 to="/about"
                 className={`nav-link py-3 ${location.pathname === '/about' ? 'nav-link-active' : ''}`}
+                onClick={() => setIsMenuOpen(false)} // Close menu on click
               >
                 Hakkımızda
               </Link>
