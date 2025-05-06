@@ -41,22 +41,23 @@ const Navbar: React.FC = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
   
-  // Update video source when theme changes
+  // Cloudinary video URL'lerini kullan
   useEffect(() => {
-    const videoElement = document.getElementById('background-video') as HTMLVideoElement;
-    if (videoElement) {
-      // Check if the video element has a source element
-      if (videoElement.querySelector('source')) {
-        const sourceElement = videoElement.querySelector('source') as HTMLSourceElement;
-        sourceElement.src = theme === 'dark' ? '/videos/Viski.mp4' : '/videos/Viski_summer.mp4';
-        videoElement.load();
-        videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
-      } else {
-        // If no source element, set src directly
-        videoElement.src = theme === 'dark' ? '/videos/Viski.mp4' : '/videos/Viski_summer.mp4';
-        videoElement.load();
-        videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
-      }
+    const videoElements = document.querySelectorAll('video') as NodeListOf<HTMLVideoElement>;
+    if (videoElements.length > 0) {
+      videoElements.forEach(videoElement => {
+        // Video elementinin source elementini bul
+        const sourceElement = videoElement.querySelector('source');
+        if (sourceElement) {
+          // Cloudinary URL'lerini kullan
+          const darkVideoUrl = "https://asset.cloudinary.com/doc39f04b/63fb307205d371fd783bf38145fe58e9";
+          const lightVideoUrl = "https://asset.cloudinary.com/doc39f04b/07207c74ae917cfc2647498d315e3d10";
+          
+          sourceElement.src = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
+          videoElement.load();
+          videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
+        }
+      });
     }
   }, [theme]);
 
