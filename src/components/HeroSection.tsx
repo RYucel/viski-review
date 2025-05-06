@@ -24,22 +24,22 @@ const HeroSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   
-  // Temaya göre video kaynağını belirle
-  const videoSrc = isDarkMode ? "/videos/Viski.mp4" : "/videos/Viski_summer.mp4";
+  // Temaya göre GIF kaynağını belirle
+  const backgroundGif = isDarkMode 
+    ? "/images/whiskey-dark.gif" 
+    : "/images/whiskey-light.gif";
   
   return (
     <section className="relative h-[70vh] overflow-hidden">
-      <video 
-        className="absolute top-0 left-0 w-full h-full object-cover z-0 video-background"
-        autoPlay 
-        muted 
-        loop 
-        playsInline
-        poster="/images/hero-poster.jpg"
-        key={videoSrc} // Video değiştiğinde yeniden yüklenmesi için key ekle
-      >
-        <source src={videoSrc} type="video/mp4" />
-      </video>
+      {/* GIF arka plan */}
+      <div 
+        className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0"
+        style={{ 
+          backgroundImage: `url(${backgroundGif})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      ></div>
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
       <div className="absolute inset-0 z-10 pointer-events-none"
