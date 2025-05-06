@@ -41,23 +41,24 @@ const Navbar: React.FC = () => {
     localStorage.setItem('theme', theme);
   }, [theme]);
   
-  // Düzeltilmiş Cloudinary video URL'leri
+  // Update video source when theme changes
   useEffect(() => {
     const videoElement = document.getElementById('background-video') as HTMLVideoElement;
     if (videoElement) {
-      // Düzeltilmiş Cloudinary URL'leri
-      const darkVideoUrl = "https://res.cloudinary.com/doc39f04b/video/upload/v1710852825/63fb307205d371fd783bf38145fe58e9.mp4";
-      const lightVideoUrl = "https://res.cloudinary.com/doc39f04b/video/upload/v1710852825/07207c74ae917cfc2647498d315e3d10.mp4";
+      // Use the exact Cloudinary URLs provided by the user
+      const darkVideoUrl = "https://asset.cloudinary.com/doc39f04b/63fb307205d371fd783bf38145fe58e9";
+      const lightVideoUrl = "https://asset.cloudinary.com/doc39f04b/07207c74ae917cfc2647498d315e3d10";
       
-      // Video elementinin source elementini bul
+      const newVideoSrc = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
+
       const sourceElement = videoElement.querySelector('source');
-      if (sourceElement) {
-        sourceElement.src = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
+      if (sourceElement && sourceElement.src !== newVideoSrc) {
+        sourceElement.src = newVideoSrc;
         videoElement.load();
         videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
-      } else {
-        // Eğer source elementi yoksa, doğrudan video src'sini ayarla
-        videoElement.src = theme === 'dark' ? darkVideoUrl : lightVideoUrl;
+      } else if (!sourceElement && videoElement.src !== newVideoSrc) {
+        // Fallback if no source element, though HeroSection should have one
+        videoElement.src = newVideoSrc;
         videoElement.load();
         videoElement.play().catch(err => console.log('Video autoplay prevented:', err));
       }
