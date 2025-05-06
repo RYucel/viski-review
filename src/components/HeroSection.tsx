@@ -24,18 +24,25 @@ const HeroSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   
-  // Statik arka plan resimleri kullan
-  const backgroundImage = isDarkMode 
-    ? "https://images.pexels.com/photos/5582863/pexels-photo-5582863.jpeg?auto=compress&cs=tinysrgb&w=1920"
-    : "https://images.pexels.com/photos/5582861/pexels-photo-5582861.jpeg?auto=compress&cs=tinysrgb&w=1920";
+  // Cloudinary video URL'leri
+  const darkVideoUrl = "https://asset.cloudinary.com/doc39f04b/63fb307205d371fd783bf38145fe58e9";
+  const lightVideoUrl = "https://asset.cloudinary.com/doc39f04b/07207c74ae917cfc2647498d315e3d10";
+  
+  // Temaya göre video URL'ini belirle
+  const videoUrl = isDarkMode ? darkVideoUrl : lightVideoUrl;
   
   return (
     <section className="relative h-[70vh] overflow-hidden">
-      {/* Statik arka plan resmi */}
-      <div 
-        className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0 animate-slow-zoom"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
-      ></div>
+      <video 
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 video-background"
+        autoPlay 
+        muted 
+        loop 
+        playsInline
+        key={videoUrl} // Video değiştiğinde yeniden yüklenmesi için key ekle
+      >
+        <source src={videoUrl} type="video/mp4" />
+      </video>
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
       <div className="absolute inset-0 z-10 pointer-events-none"
