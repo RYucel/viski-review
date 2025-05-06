@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   
   // Tema değişikliğini algıla
   useEffect(() => {
@@ -30,20 +32,49 @@ const HeroSection: React.FC = () => {
   
   // Temaya göre video URL'ini belirle
   const videoUrl = isDarkMode ? darkVideoUrl : lightVideoUrl;
+
+  // Video yükleme ve hata işleme
+  const handleVideoLoad = () => {
+    setVideoLoaded(true);
+    setVideoError(false);
+  };
+
+  const handleVideoError = () => {
+    console.error("Video yüklenirken hata oluştu:", videoUrl);
+    setVideoError(true);
+  };
+  
+  // Statik arka plan resmi (video yüklenemezse)
+  const fallbackImage = isDarkMode 
+    ? "https://images.pexels.com/photos/5582863/pexels-photo-5582863.jpeg?auto=compress&cs=tinysrgb&w=1920"
+    : "https://images.pexels.com/photos/5582861/pexels-photo-5582861.jpeg?auto=compress&cs=tinysrgb&w=1920";
   
   return (
     <section className="relative h-[70vh] overflow-hidden">
-      <video 
-        id="background-video"
-        className="absolute top-0 left-0 w-full h-full object-cover z-0 video-background"
-        autoPlay 
-        muted 
-        loop 
-        playsInline
-        key={videoUrl} // Video değiştiğinde yeniden yüklenmesi için key ekle
-      >
-        <source src={videoUrl} type="video/mp4" />
-      </video>
+      {/* Video arka plan */}
+      {!videoError && (
+        <video 
+          id="background-video"
+          className="absolute top-0 left-0 w-full h-full object-cover z-0 video-background"
+          autoPlay 
+          muted 
+          loop 
+          playsInline
+          key={videoUrl}
+          onLoadedData={handleVideoLoad}
+          onError={handleVideoError}
+        >
+          <source src={videoUrl} type="video/mp4" />
+        </video>
+      )}
+      
+      {/* Yedek statik arka plan (video yüklenemezse) */}
+      {videoError && (
+        <div 
+          className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0 animate-slow-zoom"
+          style={{ backgroundImage: `url(${fallbackImage})` }}
+        ></div>
+      )}
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
       <div className="absolute inset-0 z-10 pointer-events-none"
