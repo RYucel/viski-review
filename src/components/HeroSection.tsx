@@ -4,19 +4,18 @@ import { Link } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Video with Overlay */}
-      <video
-        id="background-video"
-        className="absolute inset-0 w-full h-full object-cover object-center z-0"
-        autoPlay
-        loop
-        muted
+    <section className="relative h-[70vh] overflow-hidden">
+      <video 
+        className="absolute top-0 left-0 w-full h-full object-cover z-0 video-background"
+        autoPlay 
+        muted 
+        loop 
         playsInline
-        style={{ opacity: 'var(--hero-video-opacity, 1)' }}
+        poster="/images/hero-poster.jpg"
       >
-        <source src="/videos/Viski.mp4" type="video/mp4" />
+        <source src="/videos/hero-background.mp4" type="video/mp4" />
       </video>
+      
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
       <div className="absolute inset-0 z-10 pointer-events-none"
         style={{
