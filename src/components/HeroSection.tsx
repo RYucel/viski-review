@@ -24,11 +24,17 @@ const HeroSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   
+  // Statik arka plan resimleri kullan
+  const backgroundImage = isDarkMode 
+    ? "https://images.pexels.com/photos/5582863/pexels-photo-5582863.jpeg?auto=compress&cs=tinysrgb&w=1920"
+    : "https://images.pexels.com/photos/5582861/pexels-photo-5582861.jpeg?auto=compress&cs=tinysrgb&w=1920";
+  
   return (
     <section className="relative h-[70vh] overflow-hidden">
-      {/* Animasyonlu arka plan */}
+      {/* Statik arka plan resmi */}
       <div 
-        className={`absolute top-0 left-0 w-full h-full bg-cover bg-center z-0 animated-bg ${isDarkMode ? 'dark-bg' : 'light-bg'}`}
+        className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0 animate-slow-zoom"
+        style={{ backgroundImage: `url(${backgroundImage})` }}
       ></div>
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}

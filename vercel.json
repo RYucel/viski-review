@@ -6,6 +6,6 @@
     }
   },
   "routes": [
-    { "src": "/videos/(.*)", "dest": "/public/videos/$1" }
+    { "src": "/videos/(.*)", "dest": "/videos/$1" }
   ]
 }

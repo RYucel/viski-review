@@ -26,6 +26,16 @@ export default {
         'hero-pattern': "url('https://images.pexels.com/photos/602750/pexels-photo-602750.jpeg?auto=compress&cs=tinysrgb&w=1600')",
         'grain-texture': "url('https://images.pexels.com/photos/7794435/pexels-photo-7794435.jpeg?auto=compress&cs=tinysrgb&w=1600&h=750&dpr=1')",
       },
+      animation: {
+        'slow-zoom': 'slowZoom 30s ease-in-out infinite alternate',
+      },
+      keyframes: {
+        slowZoom: {
+          '0%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.1)' },
+          '100%': { transform: 'scale(1)' },
+        },
+      },
     },
   },
   plugins: [],
