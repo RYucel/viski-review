@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { GlassWater, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const HeroSection: React.FC = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  
+  // Tema değişikliğini algıla
+  useEffect(() => {
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark');
+      setIsDarkMode(isDark);
+    };
+    
+    checkTheme();
+    
+    // Tema değişikliğini dinle
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, { 
+      attributes: true, 
+      attributeFilter: ['class'] 
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+  
+  // Temaya göre video kaynağını belirle
+  const videoSrc = isDarkMode ? "/videos/Viski.mp4" : "/videos/Viski_summer.mp4";
+  
   return (
     <section className="relative h-[70vh] overflow-hidden">
       <video 
@@ -12,14 +36,17 @@ const HeroSection: React.FC = () => {
         loop 
         playsInline
         poster="/images/hero-poster.jpg"
+        key={videoSrc} // Video değiştiğinde yeniden yüklenmesi için key ekle
       >
-        <source src="/videos/Viski.mp4" type="video/mp4" />
+        <source src={videoSrc} type="video/mp4" />
       </video>
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
       <div className="absolute inset-0 z-10 pointer-events-none"
         style={{
-          background: 'var(--hero-overlay-bg, rgba(25,24,21,0.85))',
+          background: isDarkMode 
+            ? 'rgba(25,24,21,0.85)' 
+            : 'rgba(255,255,255,0.65)',
         }}
       ></div>
       
