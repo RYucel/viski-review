@@ -23,7 +23,7 @@
       ]
     },
     {
-      "source": "/images/(.*)", // Added rule for images
+      "source": "/images/(.*)", 
       "headers": [
         {
           "key": "Cache-Control",
