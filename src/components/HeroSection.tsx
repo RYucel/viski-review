@@ -25,9 +25,9 @@ const HeroSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   
-  // Local GIF URLs (assuming they are in public/gifs/)
-  const darkGifUrl = "/gifs/dark-background.gif"; // Replace with your actual dark mode GIF file name
-  const lightGifUrl = "/gifs/light-background.gif"; // Replace with your actual light mode GIF file name
+  // Corrected local GIF URLs based on the file structure
+  const darkGifUrl = "/images/whiskey-dark.gif"; 
+  const lightGifUrl = "/images/whiskey-light.gif"; 
   
   // Temaya göre GIF URL'ini belirle
   const backgroundUrl = isDarkMode ? darkGifUrl : lightGifUrl;
