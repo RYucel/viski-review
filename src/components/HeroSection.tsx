@@ -6,6 +6,8 @@ const HeroSection: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
   // Remove videoLoaded and videoError states
   
+  console.log('HeroSection.tsx: Forcing Vercel rebuild - v2'); // Add this line
+  
   // Tema değişikliğini algıla
   useEffect(() => {
     const checkTheme = () => {
