@@ -24,21 +24,11 @@ const HeroSection: React.FC = () => {
     return () => observer.disconnect();
   }, []);
   
-  // Temaya göre GIF kaynağını belirle
-  const backgroundGif = isDarkMode 
-    ? "/images/whiskey-dark.gif" 
-    : "/images/whiskey-light.gif";
-  
   return (
     <section className="relative h-[70vh] overflow-hidden">
-      {/* GIF arka plan */}
+      {/* Animasyonlu arka plan */}
       <div 
-        className="absolute top-0 left-0 w-full h-full bg-cover bg-center z-0"
-        style={{ 
-          backgroundImage: `url(${backgroundGif})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
-        }}
+        className={`absolute top-0 left-0 w-full h-full bg-cover bg-center z-0 animated-bg ${isDarkMode ? 'dark-bg' : 'light-bg'}`}
       ></div>
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
