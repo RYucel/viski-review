@@ -13,7 +13,7 @@ const HeroSection: React.FC = () => {
         playsInline
         poster="/images/hero-poster.jpg"
       >
-        <source src="/videos/hero-background.mp4" type="video/mp4" />
+        <source src="/videos/Viski.mp4" type="video/mp4" />
       </video>
       
       {/* Overlay: dark modda koyu, light modda beyaz tint */}
